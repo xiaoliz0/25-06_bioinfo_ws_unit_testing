@@ -1,5 +1,6 @@
 from third.third import greeting
 import pytest
+from contextlib import nullcontext
 
 def test_greeting_eng():
     assert greeting("James", "English") == "Hello James!"
@@ -28,3 +29,14 @@ def test_greeting_language_wrong_type():
 # remove the old test after you have completed the task
 # add your changes: git add third/tests/third_test.py
 # commit your changes using commit message conventions (https://inpred.github.io/24-03_bioinfo_ws/#19): git commit -m "test: <your commit message>"
+@pytest.mark.parametrize(
+    "name, language, exception, want",
+    [
+        ("xiaoli", "English", nullcontext(), "Hello xiaoli!"),
+        (1, "English", pytest.raises(TypeError), None)
+    ]
+)
+
+def test_greeting(name, language, exception, want):
+    with exception:
+        assert greeting(name, language) == want
